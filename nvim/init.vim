@@ -125,18 +125,18 @@ endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 " text search in file
-command! -bang -nargs=* LP
-  \ call fzf#vim#grep(
-  \  'rg --with-filename --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
-  \  fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}), <bang>0)
+" command! -bang -nargs=* LP
+"   \ call fzf#vim#grep(
+"   \  'rg --with-filename --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+"   \  fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}), <bang>0)
 
 " File search
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " hide status bar on fzf commands
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+" autocmd! FileType fzf set laststatus=0 noshowmode noruler
+"   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 " Tab through searches
 nmap <leader><tab> <plug>(fzf-maps-n)
@@ -144,9 +144,9 @@ xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
 " Normal ctrl-f functionality
-map <C-f> :LP<CR>
+map <C-f> :RG<CR>
 " rip grep all files
-map <C-g> :RG<CR>
+" map <C-g> :RG<CR>
 " ctrl-p functionality of vscode
 map <C-p> :Files<CR>
 " }}}
