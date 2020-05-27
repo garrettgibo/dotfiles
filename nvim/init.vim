@@ -4,6 +4,10 @@ autocmd! bufwritepost ~/.config/nvim/init.vim source %
 " Plugins {{{
 call plug#begin('~/.config/nvim/bundle')
 
+" FZF
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 " Emmet
 Plug 'mattn/emmet-vim'
 
@@ -13,21 +17,12 @@ Plug 'christoomey/vim-tmux-navigator'
 " Highlight trailing whitespace
 Plug 'ntpeters/vim-better-whitespace'
 
-" Git gutter
-" Plug 'airblade/vim-gitgutter'
-
 " Better status line
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Icons
 Plug 'ryanoasis/vim-devicons'
-
-" Fuzzy Find
-Plug 'ctrlpvim/ctrlp.vim'
-
-" Quick Scope
-Plug 'unblevable/quick-scope'
 
 " Nerd Tree
 Plug 'scrooloose/nerdtree'
@@ -43,14 +38,15 @@ Plug 'shime/vim-livedown'
 " better commenteing
 Plug 'preservim/nerdcommenter'
 
-" show vertical indentations
-" Plug 'Yggdroot/indentLine'
-
 " Better folding
 Plug 'tmhedberg/simpylfold'
 
 " Lots of good autocomplete stuff
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" toggle terminal
+Plug 'caenrique/nvim-toggle-terminal'
+
 
 " Initialize plugin system
 call plug#end()
@@ -66,11 +62,15 @@ set noswapfile
 set noshowmode
 set cmdheight=1
 filetype plugin on
-set foldmethod=marker
-
+set foldmethod=indent
 set undofile
 set undodir=/tmp/
 "}}}
+
+" Splitting {{{
+set splitright
+set splitbelow
+" }}}
 
 " Searching {{{
 set ignorecase
@@ -107,24 +107,48 @@ colorscheme solarized8_high
 set background=dark
 " }}}
 
+" fzf
+let fzf_layout={'window': { 'width': 0.8, 'height': 0.8, 'xoffset':0.5, 'yoffset':0.5 }}
+let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline'
+map <C-f> :RG<CR>
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+command! -bang -nargs=* LinesWithPreview
+    \ call fzf#vim#grep(
+    \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+    \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}),
+    \   1)
+nnoremap H :LinesWithPreview<CR>
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+autocmd! FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.config/nvim/bundle/fzf.vim/bin/preview.sh {}']}, <bang>0)
+map <C-p> :Files<CR>
+
 " Better White Space {{{
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:strip_whitespace_confirm=0
 " }}}
 
-" Ctrl-P {{{
-let g:ctrl_map = '<c-p>'
-let g:ctrl_cmd = 'CtrlP'
-" }}}
-
-" {{{ Quick Scope
-" Trigger a highlight only when pressing f and F.
-let g:qs_highlight_on_keys = ['f', 'F']
-" }}}
 
 " Folding {{{
-let g:SimpylFold_fold_import=0
+" let g:SimpylFold_fold_import=0
 " }}}
 
 " Status line {{{
@@ -133,7 +157,7 @@ let g:airline_theme='atomic'
 " }}}
 
 " NerdTree {{{
-nmap <C-f> :NERDTreeToggle<CR>
+nmap <C-e> :NERDTreeToggle<CR>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let g:NERDTreeIgnore = ['^.git$']
 let NERDTreeQuitOnOpen = 1
@@ -203,17 +227,17 @@ nmap <C-_> <leader>c<Space>
 
 " Clipboard with Tmux {{{
 let g:clipboard = {
-      \   'name': 'myClipboard',
-      \   'copy': {
-      \      '+': 'tmux load-buffer -',
-      \      '*': 'tmux load-buffer -',
-      \    },
-      \   'paste': {
-      \      '+': 'tmux save-buffer -',
-      \      '*': 'tmux save-buffer -',
-      \   },
-      \   'cache_enabled': 1,
-      \ }
+  \   'name': 'myClipboard',
+  \   'copy': {
+  \      '+': 'tmux load-buffer -',
+  \      '*': 'tmux load-buffer -',
+  \    },
+  \   'paste': {
+  \      '+': 'tmux save-buffer -',
+  \      '*': 'tmux save-buffer -',
+  \   },
+  \   'cache_enabled': 1,
+  \ }
 " }}}
 
 " Autostuff {{{
@@ -260,4 +284,13 @@ map <C-j> <c-w>j
 map <C-k> <c-w>k
 map <C-l> <c-w>l
 map <C-h> <c-w>h
+tnoremap <C-j> <c-w>j
+tnoremap <C-k> <c-w>k
+tnoremap <C-l> <c-w>l
+tnoremap <C-h> <c-w>h
+
+nnoremap <silent> <C-t> :ToggleTerminal<Enter>
+tnoremap <silent> <C-t> <C-\><C-n>:ToggleTerminal<Enter>
+
+tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 " }}}
