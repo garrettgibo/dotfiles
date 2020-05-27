@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Link neovim init.vim
+nvimHome=$HOME/.config/nvim
+[ ! -d $nvimHome ] && echo "Creating .config/nvim" && mkdir $nvimHome
+[ -f $nvimHome/init.vim ] && echo "Removing previous init" && rm $nvimHome/init.vim
+ln nvim/init.vim $nvimHome/init.vim && echo "Linking init.vim"
