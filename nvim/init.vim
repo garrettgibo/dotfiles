@@ -62,7 +62,7 @@ set noswapfile
 set noshowmode
 set cmdheight=1
 filetype plugin on
-set foldmethod=indent
+set foldmethod=marker
 set undofile
 set undodir=/tmp/
 "}}}
@@ -100,6 +100,7 @@ au BufNewFile,BufRead *.py
     \ set tabstop=4 |
     \ set softtabstop=4 |
     \ set shiftwidth=4 |
+    \ set foldmethod=marker |
 " }}}
 
 " Colors {{{
@@ -107,10 +108,12 @@ colorscheme solarized8_high
 set background=dark
 " }}}
 
-" fzf
-let fzf_layout={'window': { 'width': 0.8, 'height': 0.8, 'xoffset':0.5, 'yoffset':0.5 }}
+" Fzf {{{
+let g:fzf_layout={'window': { 'width': 0.8, 'height': 0.8, 'xoffset':0.5, 'yoffset':0.5 }}
 let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline'
-map <C-f> :RG<CR>
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+
+" text search across files
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
@@ -121,24 +124,32 @@ endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
-command! -bang -nargs=* LinesWithPreview
-    \ call fzf#vim#grep(
-    \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
-    \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}),
-    \   1)
-nnoremap H :LinesWithPreview<CR>
+" text search in file
+command! -bang -nargs=* LP
+  \ call fzf#vim#grep(
+  \  'rg --with-filename --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+  \  fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}), <bang>0)
 
-" Mapping selecting mappings
+" File search
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" hide status bar on fzf commands
+autocmd! FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
+" Tab through searches
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.config/nvim/bundle/fzf.vim/bin/preview.sh {}']}, <bang>0)
+" Normal ctrl-f functionality
+map <C-f> :LP<CR>
+" rip grep all files
+map <C-g> :RG<CR>
+" ctrl-p functionality of vscode
 map <C-p> :Files<CR>
+" }}}
 
 " Better White Space {{{
 let g:better_whitespace_enabled=1
@@ -146,9 +157,8 @@ let g:strip_whitespace_on_save=1
 let g:strip_whitespace_confirm=0
 " }}}
 
-
 " Folding {{{
-" let g:SimpylFold_fold_import=0
+let g:SimpylFold_fold_import=0
 " }}}
 
 " Status line {{{
@@ -164,6 +174,10 @@ let NERDTreeQuitOnOpen = 1
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 " let NERDTreeDirArrows = 1
+" }}}
+
+" Line Position {{{
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 " }}}
 
 " Coc {{{
