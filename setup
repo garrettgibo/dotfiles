@@ -13,3 +13,7 @@ zshHome=$HOME/.config/zsh
 [ -f $HOME/.zshenv ] && echo "Removing previous .zshenv" && rm $HOME/.zshenv
 ln zsh/zshenv $HOME/.zshenv && echo "Linking .zshenv"
 ln zsh/zshrc $zshHome/.zshrc && echo "Linking .zshrc"
+
+# Link zsh stuff
+[ -f $Home/.tmux.conf ] && echo "Removing previous tmux.conf" && rm $Home/.tmux.conf
+ln tmux/tmux.conf $HOME/.tmux.conf && echo "Linking tmux.conf"
