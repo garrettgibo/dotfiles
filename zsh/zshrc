@@ -13,7 +13,7 @@ export ZSH="/home/garrett/.config/oh-my-zsh"
 # Change default histfile location
 export HISTFILE=~/.config/zsh/zsh_history
 
-ZSH_THEME="avit"
+ZSH_THEME="bira"
 
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
@@ -30,6 +30,7 @@ plugins=(
 	zsh-autosuggestions
 	colored-man-pages
 	history-substring-search
+  virtualenv
 )
 
 source $ZSH/oh-my-zsh.sh
