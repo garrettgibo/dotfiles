@@ -62,9 +62,11 @@ set noswapfile
 set noshowmode
 set cmdheight=1
 filetype plugin on
-set foldmethod=marker
 set undofile
 set undodir=/tmp/
+set foldmethod=marker
+set foldlevelstart=20
+set foldnestmax=1
 "}}}
 
 " Splitting {{{
@@ -100,7 +102,7 @@ au BufNewFile,BufRead *.py
     \ set tabstop=4 |
     \ set softtabstop=4 |
     \ set shiftwidth=4 |
-    \ set foldmethod=marker |
+    \ set foldmethod=indent |
 " }}}
 
 " Colors {{{
