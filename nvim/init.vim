@@ -4,6 +4,10 @@ autocmd! bufwritepost ~/.config/nvim/init.vim source %
 " Plugins {{{
 call plug#begin('~/.config/nvim/bundle')
 
+" colorscheme switcher
+Plug 'xolox/vim-colorscheme-switcher'
+Plug 'xolox/vim-misc'
+
 " FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -30,7 +34,7 @@ Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Colorscheme
-Plug 'lifepillar/vim-solarized8'
+"Plug 'lifepillar/vim-solarized8'
 
 " live markdown
 Plug 'shime/vim-livedown'
@@ -50,6 +54,16 @@ Plug 'caenrique/nvim-toggle-terminal'
 " jsx colored syntax
 Plug 'maxmellon/vim-jsx-pretty'
 
+" Better json highlighting
+Plug 'elzr/vim-json'
+
+" TypeScript highlighting
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+
+" colors
+Plug 'romainl/flattened'
+
 
 " Initialize plugin system
 call plug#end()
@@ -57,7 +71,7 @@ call plug#end()
 
 " System {{{
 let mapleader=","
-set clipboard=unnamed
+set clipboard=unnamedplus
 set mouse=a
 set nobackup
 set nowritebackup
@@ -87,9 +101,9 @@ set mat=2
 
 " Formatting {{{
 set wrap
-set textwidth=80
+set textwidth=79
 set scrolloff=10
-set colorcolumn=80
+set colorcolumn=80,90
 highlight ColorColumn ctermbg=lightgrey guibg=lightgrey
 
 " Default tabbing and indenting
@@ -109,8 +123,12 @@ au BufNewFile,BufRead *.py
 " }}}
 
 " Colors {{{
-colorscheme solarized8_high
-set background=dark
+colorscheme flattened_light
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
+" Toggle background
+"map <F5> :colorscheme (&colorscheme == "flattened_light" ? "flattened_dark" : "flattened_light" )<CR>
+
+let g:colorscheme_switcher_exclude_builtins=1
 " }}}
 
 " Fzf {{{
@@ -285,7 +303,7 @@ noremap q 0
 noremap ; $
 nnoremap j gj
 nnoremap k gk
-"nnoremap p "+pa
+nnoremap p "+pa
 nnoremap <space> za
 vnoremap < <gv
 vnoremap > >gv
@@ -293,9 +311,6 @@ vnoremap > >gv
 " Exiting everything with Ctrl-C
 inoremap <C-c> <ESC>
 nnoremap <C-c> :x<CR>
-
-" Toggle background
-map <F5> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
 " Remove search highlight
 nnoremap <C-space> :nohl<CR>
@@ -314,4 +329,12 @@ nnoremap <silent> <C-t> :ToggleTerminal<Enter>
 tnoremap <silent> <C-t> <C-\><C-n>:ToggleTerminal<Enter>
 
 tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+
+" Better copy paste
+vmap y y:call system("xclip -i -selection clipboard", getreg("\""))<CR>:call system("xclip -i", getreg("\""))<CR>
+
+map <C-a> GVgg
+map <C-s> :w <Enter>
+map <C-t> :tabnew <Enter>
+
 " }}}
