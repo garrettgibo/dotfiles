@@ -47,6 +47,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " toggle terminal
 Plug 'caenrique/nvim-toggle-terminal'
 
+" jsx colored syntax
+Plug 'maxmellon/vim-jsx-pretty'
+
 
 " Initialize plugin system
 call plug#end()
@@ -66,7 +69,7 @@ set undofile
 set undodir=/tmp/
 set foldmethod=marker
 set foldlevelstart=20
-set foldnestmax=1
+set foldnestmax=2
 "}}}
 
 " Splitting {{{
@@ -161,6 +164,8 @@ let g:strip_whitespace_confirm=0
 
 " Folding {{{
 let g:SimpylFold_fold_import=0
+let g:SimpylFold_fold_docstring=0
+let g:SimpylFold_docstring_preview=0
 " }}}
 
 " Status line {{{
@@ -234,7 +239,7 @@ let g:livedown_port = 1234
 " }}}
 
 " Nerd Commenter {{{
-let g:NERDSpaceDelims = 1
+let g:NERDSpaceDelims = 0
 let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
 vmap <C-_> <leader>c<Space>
