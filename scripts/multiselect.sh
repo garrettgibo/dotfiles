@@ -16,6 +16,8 @@
 #   Returns selected options
 #######################################
 function multiselect {
+    echo "Select to Setup/Install: "
+
     # little helpers for terminal print control and key input
     ESC=$( printf "\033")
     cursor_blink_on()   { printf "$ESC[?25h"; }
