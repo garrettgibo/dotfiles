@@ -25,3 +25,8 @@ function setup_tmux {
   # install tmux
   # - link tmux.conf
 }
+
+function setup_extras {
+  echo "setting up extra applications";
+  # TODO create multiselections for extra applications to install
+}

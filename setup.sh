@@ -7,7 +7,7 @@
 source ./scripts/multiselect.sh
 source ./scripts/setup_functions.sh
 
-OPTIONS=("zsh" "neovim" "tmux")
+OPTIONS=("zsh" "neovim" "tmux" "extras")
 OPTIONS_STRING=$(IFS=\; ; echo "${OPTIONS[*]}")
 
 multiselect SELECTED "$OPTIONS_STRING"
@@ -16,9 +16,10 @@ multiselect SELECTED "$OPTIONS_STRING"
 for i in "${!SELECTED[@]}"; do
   if [ "${SELECTED[$i]}" == "true" ]; then
     case ${OPTIONS[$i]} in
-      "zsh") setup_zsh;;
+      "zsh")    setup_zsh;;
       "neovim") setup_neovim;;
-      "tmux") setup_tmux;;
+      "tmux")   setup_tmux;;
+      "extras") setup_extras;;
     esac
   fi
 done
