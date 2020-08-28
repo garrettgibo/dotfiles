@@ -1,7 +1,11 @@
 #!/bin/sh
+#
+# Script to select and setup necessary components for the optimal experience.
+#
 
 # Source necessary functions
 source ./scripts/multiselect.sh
+source ./scripts/
 
 OPTIONS=("Zsh" "Neovim" "Tmux")
 OPTIONS_STRING=$(IFS=\; ; echo "${OPTIONS[*]}")
