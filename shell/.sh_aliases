@@ -1,4 +1,0 @@
-alias git=hub
-alias vim=nvim
-alias open=xdg-open
-alias envim="vim ~/.config/nvim/init.vim"
