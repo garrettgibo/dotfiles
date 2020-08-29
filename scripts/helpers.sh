@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Helper functions for setup and installer
-# 
+#
 
 
 # determine if system is arch debian based
@@ -19,7 +19,7 @@ function check_system {
 # install packages for following systems:
 # - arch based
 # - debian based
-function install {
+install() {
   check_system SYSTEM_TYPE
   if [ $SYSTEM_TYPE == "arch" ]; then
     sudo pacman -S "$@"
@@ -32,8 +32,8 @@ function install {
 
 
 # pretty print statement with color option
-function pprint {
-  case $1 in 
+pprint() {
+  case $1 in
     title)
       tput setaf $(((RANDOM % 6) + 1))
       figlet $2;;
@@ -49,6 +49,33 @@ function pprint {
     blue)
       tput setaf 4 # blue
       echo $2;;
+    bold)
+      tput bold
+      echo $2;;
   esac
   tput sgr 0;
 }
+
+setup_shell() {
+	# Prompt for user choice on changing the default login shell
+	# pprint yellow
+	read -p "Do you want to change your default shell to zsh? [Y/n]" opt
+	case $opt in
+		y*|Y*|"") echo "Changing the shell..." ;;
+		n*|N*) echo "Shell change skipped."; return ;;
+		*) echo "Invalid choice. Shell change skipped."; return ;;
+	esac
+
+	zsh=$(which zsh)
+
+	# Actually change the default shell to zsh
+	if ! chsh -s "$zsh"; then
+		pprint red "chsh command unsuccessful. Change your default shell manually."
+	else
+		export SHELL="$zsh"
+		pprint green "Shell successfully changed to '$zsh'."
+	fi
+
+	pprint green "Restart shell to change to zsh"
+}
+
