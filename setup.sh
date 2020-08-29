@@ -8,10 +8,10 @@ source ./scripts/helpers.sh
 source ./scripts/multiselect.sh
 source ./scripts/setup_functions.sh
 
-OPTIONS=("zsh" "neovim" "tmux" "extras")
+OPTIONS=("zsh" "neovim" "tmux" "node" "extras")
 OPTIONS_STRING=$(IFS=\; ; echo "${OPTIONS[*]}")
 
-echo "Select to Setup/Install: "
+pprint bold "Select to Setup/Install: "
 
 multiselect SELECTED "$OPTIONS_STRING"
 
@@ -22,7 +22,10 @@ for i in "${!SELECTED[@]}"; do
       "zsh")    setup_zsh;;
       "neovim") setup_neovim;;
       "tmux")   setup_tmux;;
+      "node")   setup_node;;
       "extras") setup_extras;;
     esac
   fi
 done
+
+pprint bold "Finished Setup"

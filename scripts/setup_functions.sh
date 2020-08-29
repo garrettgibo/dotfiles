@@ -14,7 +14,7 @@ setup_zsh() {
   pprint title zsh
 
   # install zsh
-  if [ ! zsh -v &> /dev/null ]; then
+  if ! type zsh &> /dev/null; then
     pprint blue "Installing zsh"
     install zsh
   else
@@ -72,7 +72,7 @@ function setup_neovim {
   pprint title neovim
 
   # install neovim
-  if [ ! nvim -v &> /dev/null ]; then
+  if ! nvim -v &> /dev/null; then
     pprint blue "Installing neovim"
     install neovim
   else
@@ -88,11 +88,11 @@ function setup_neovim {
     pprint blue "- Linking nvim/init.vim to $NVIM/init.vim"
 
   # installing fzf and ripgrep
-  if [ ! fzf --version &> /dev/null ]; then
+  if ! fzf --version &> /dev/null; then
     pprint blue "Installing fzf"
     install fzf
   fi
-  if [ ! rg -v &> /dev/null ]; then
+  if ! rg -v &> /dev/null; then
     pprint blue "Installing ripgrep"
     install fzf ripgrep
   fi
@@ -108,6 +108,42 @@ setup_tmux() {
   # TODO:
   # install tmux
   # - link tmux.conf
+}
+
+setup_node() {
+  pprint title node
+
+  if ! node -v &> /dev/null; then
+    pprint blue "Installing nodejs"
+    install nodejs
+  else
+    pprint yellow "nodejs already installed"
+  fi
+
+  if ! npm -v &> /dev/null; then
+    pprint blue "Installing npm"
+    install npm
+  else
+    pprint yellow "npm already installed"
+  fi
+
+  if ! yarn -v &> /dev/null; then
+    pprint blue "Installing yarn"
+    install yarn
+  else
+    pprint yellow "yarn already installed"
+  fi
+
+	read -p "Do you want to install some node packages? [Y/n]" opt
+	case $opt in
+		y*|Y*|"") ;;
+		n*|N*) return;;
+		*) return;;
+	esac
+
+  # node packages to install
+  pprint blue "Installing neovim from npm"
+  sudo npm install -g neovim
 }
 
 setup_extras() {
