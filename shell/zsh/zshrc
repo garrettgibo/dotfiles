@@ -19,8 +19,8 @@ plugins=(
   zsh-autosuggestions
 )
 
-compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
-
 source $ZSH/oh-my-zsh.sh
 source $ZDOTDIR/.zsh_aliases
 source /home/garrett/.config/broot/launcher/bash/br
+
+compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION

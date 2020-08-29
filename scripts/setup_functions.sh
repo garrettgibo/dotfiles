@@ -58,6 +58,10 @@ function setup_zsh {
   git clone https://github.com/zsh-users/zsh-autosuggestions \
     $ZSH_CUSTOM/plugins/zsh-autosuggestions &> /dev/null
 
+  # change to zsh
+  chsh -s /bin/zsh
+  exec zsh -l
+
   pprint green "F I N I S H E D  Z S H"
 }
 
