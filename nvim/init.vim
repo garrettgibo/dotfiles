@@ -4,68 +4,42 @@ autocmd! bufwritepost ~/.config/nvim/init.vim source %
 " Plugins {{{
 call plug#begin('~/.config/nvim/bundle')
 
-" colorscheme switcher
-Plug 'xolox/vim-colorscheme-switcher'
-Plug 'xolox/vim-misc'
+" Lots of good autocomplete stuff
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Emmet
+Plug 'mattn/emmet-vim'
 
 " FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" Emmet
-Plug 'mattn/emmet-vim'
-
-" Seamless tmux vim navigation
-Plug 'christoomey/vim-tmux-navigator'
-
-" Highlight trailing whitespace
-Plug 'ntpeters/vim-better-whitespace'
+" Better json highlighting
+Plug 'elzr/vim-json'
 
 " Better status line
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" Highlight trailing whitespace
+Plug 'ntpeters/vim-better-whitespace'
+
 " Icons
 Plug 'ryanoasis/vim-devicons'
+
+" live markdown
+Plug 'shime/vim-livedown'
 
 " Nerd Tree
 Plug 'scrooloose/nerdtree'
 Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Colorscheme
-"Plug 'lifepillar/vim-solarized8'
-
-" live markdown
-Plug 'shime/vim-livedown'
-
 " better commenteing
 Plug 'preservim/nerdcommenter'
 
 " Better folding
 Plug 'tmhedberg/simpylfold'
-
-" Lots of good autocomplete stuff
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" toggle terminal
-Plug 'caenrique/nvim-toggle-terminal'
-
-" jsx colored syntax
-Plug 'maxmellon/vim-jsx-pretty'
-
-" Better json highlighting
-Plug 'elzr/vim-json'
-
-" TypeScript highlighting
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-
-" colors
-Plug 'romainl/flattened'
-
-
-" Initialize plugin system
 call plug#end()
 " }}}
 
@@ -123,12 +97,7 @@ au BufNewFile,BufRead *.py
 " }}}
 
 " Colors {{{
-colorscheme flattened_light
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
-" Toggle background
-"map <F5> :colorscheme (&colorscheme == "flattened_light" ? "flattened_dark" : "flattened_light" )<CR>
-
-let g:colorscheme_switcher_exclude_builtins=1
 " }}}
 
 " Fzf {{{
