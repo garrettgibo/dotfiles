@@ -30,12 +30,7 @@ Plug 'ryanoasis/vim-devicons'
 " live markdown
 Plug 'shime/vim-livedown'
 
-" Nerd Tree
-Plug 'scrooloose/nerdtree'
-Plug 'vwxyutarooo/nerdtree-devicons-syntax'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
-" better commenteing
+" better commenting
 Plug 'preservim/nerdcommenter'
 
 " Better folding
@@ -158,16 +153,6 @@ let g:SimpylFold_docstring_preview=0
 " Status line {{{
 let g:airline_powerline_fonts = 1
 let g:airline_theme='atomic'
-" }}}
-
-" NerdTree {{{
-nmap <C-e> :NERDTreeToggle<CR>
-nnoremap <silent> <Leader>v :NERDTreeFind<CR>
-let g:NERDTreeIgnore = ['^.git$']
-let NERDTreeQuitOnOpen = 1
-let NERDTreeAutoDeleteBuffer = 1
-let NERDTreeMinimalUI = 1
-" let NERDTreeDirArrows = 1
 " }}}
 
 " Line Position {{{
