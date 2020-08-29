@@ -5,7 +5,7 @@
 # /___|___/_| |_|_|  \___|
 #
 ZSH_THEME="bira"
-ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="false"
 
 # Plugins
 plugins=(
