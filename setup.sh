@@ -4,11 +4,14 @@
 #
 
 # Source necessary functions
+source ./scripts/helpers.sh
 source ./scripts/multiselect.sh
 source ./scripts/setup_functions.sh
 
 OPTIONS=("zsh" "neovim" "tmux" "extras")
 OPTIONS_STRING=$(IFS=\; ; echo "${OPTIONS[*]}")
+
+echo "Select to Setup/Install: "
 
 multiselect SELECTED "$OPTIONS_STRING"
 
