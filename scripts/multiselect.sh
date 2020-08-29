@@ -16,8 +16,6 @@
 #   Returns selected options
 #######################################
 function multiselect {
-    echo "Select to Setup/Install: "
-
     # little helpers for terminal print control and key input
     ESC=$( printf "\033")
     cursor_blink_on()   { printf "$ESC[?25h"; }
@@ -112,7 +110,6 @@ function multiselect {
 
     # cursor position back to normal
     cursor_to $lastrow
-    printf "\n"
     cursor_blink_on
 
     eval $retval='("${selected[@]}")'
