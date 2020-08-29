@@ -9,16 +9,18 @@ ENABLE_CORRECTION="true"
 
 # Plugins
 plugins=(
-  git
-  zsh-syntax-highlighting
-  zsh-autosuggestions
+  # defaults
   colored-man-pages
+  git
   history-substring-search
   virtualenv
+  # custom
+  zsh-syntax-highlighting
+  zsh-autosuggestions
 )
 
 compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
 
 source $ZSH/oh-my-zsh.sh
-source $ZSH/.sh_aliases
+source $ZDOTDIR/.zsh_aliases
 source /home/garrett/.config/broot/launcher/bash/br
