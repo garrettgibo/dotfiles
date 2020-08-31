@@ -1,18 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Helper functions for setup and installer
 #
 
 
 # determine if system is arch debian based
-function check_system {
-  local system_type=$1
-  if [ -n "$(uname -a | grep arch)" ]; then
+check_system() {
+  system_type=$1
+  if uname -a | grep arch; then
     system="arch"
-  elif [ -f "$(uname -a | grep Ubuntu)" ]; then
+  elif uname -a | grep Ubuntu; then
     system="debian"
   fi
-  eval $system_type=$system
+  eval "$system_type"="$system"
 }
 
 
@@ -20,10 +20,10 @@ function check_system {
 # - arch based
 # - debian based
 install() {
-  check_system SYSTEM_TYPE
-  if [ $SYSTEM_TYPE == "arch" ]; then
+  check_system system_type
+  if [ "$system_type" == "arch" ]; then
     sudo pacman -S "$@"
-  elif [ $SYSYTEM_TYPE == "debian" ]; then
+  elif [ "$system_type" == "debian" ]; then
     sudo apt install -y "$@"
   else
     echo "Unknown system. Cannot install $1"
@@ -36,22 +36,22 @@ pprint() {
   case $1 in
     title)
       tput setaf $(((RANDOM % 6) + 1))
-      figlet $2;;
+      figlet "$2";;
     red)
       tput setaf 1 # red
-      echo $2;;
+      echo "$2";;
     green)
       tput setaf 2 # green
-      echo $2;;
+      echo "$2";;
     yellow)
       tput setaf 3 # yellow
-      echo $2;;
+      echo "$2";;
     blue)
       tput setaf 4 # blue
-      echo $2;;
+      echo "$2";;
     bold)
       tput bold
-      echo $2;;
+      echo "$2";;
   esac
   tput sgr 0;
 }
@@ -59,7 +59,7 @@ pprint() {
 setup_shell() {
 	# Prompt for user choice on changing the default login shell
 	# pprint yellow
-	read -p "Do you want to change your default shell to zsh? [Y/n]" opt
+	read -rp "Do you want to change your default shell to zsh? [Y/n]" opt
 	case $opt in
 		y*|Y*|"") echo "Changing the shell..." ;;
 		n*|N*) echo "Shell change skipped."; return ;;

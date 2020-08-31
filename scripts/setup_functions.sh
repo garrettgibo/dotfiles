@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # setup functions
 #
@@ -14,7 +14,7 @@ setup_zsh() {
   pprint title zsh
 
   # install zsh
-  if ! type zsh &> /dev/null; then
+  if ! type zsh >> /dev/null 2>&1; then
     pprint blue "Installing zsh"
     install zsh
   else
@@ -22,31 +22,32 @@ setup_zsh() {
   fi
 
   # Remove existing .zsh* configs
-  [ -d $ZDOTDIR ] && rm -rf $ZDOTDIR
-  [ -f $HOME/.zshenv ] && rm $HOME/.zshenv
+  [ -d "$ZDOTDIR" ] && rm -rf "$ZDOTDIR"
+  [ -f "$HOME/.zshenv" ] && rm "$HOME/.zshenv"
 
   # Link .zsh* configs to dotfiles
-  mkdir $ZDOTDIR && pprint blue "- Creating $ZDOTDIR"
+  mkdir "$ZDOTDIR" && pprint blue "- Creating $ZDOTDIR"
 
-  ln shell/zsh/zshenv $HOME/.zshenv && \
+  ln shell/zsh/zshenv "$HOME/.zshenv" && \
     pprint blue "- Linking shell/zsh/zshenv to $HOME/.zshenv"
 
-  ln shell/zsh/zshrc $ZDOTDIR/.zshrc && \
+  ln shell/zsh/zshrc "$ZDOTDIR/.zshrc" && \
     pprint blue "- Linking shell/zsh/zshrc to $ZDOTDIR/.zshrc"
 
-  ln shell/aliases $ZDOTDIR/.zsh_aliases && \
+  ln shell/aliases "$ZDOTDIR/.zsh_aliases" && \
     pprint blue "- Linking shell/aliases to $ZDOTDIR/.zsh_aliases"
 
   # set env vars for zsh
-  source $HOME/.zshenv
+  # shellcheck source=/dev/null
+  . "$HOME/.zshenv"
 
   # Install Oh-My-Zsh
-  if [ ! -d $HOME/.oh-my-zsh -a ! -d $ZSH ]; then
+  if [ ! -d "$HOME/.oh-my-zsh" ] &&  [ ! -d "$ZSH" ]; then
     pprint blue "Installing Oh-My-Zsh"
     omzinstall=https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-    curl -Lo install.sh $omzinstall &> /dev/null
-    sh install.sh --unattended &> /dev/null && rm install.sh
-    rm $HOME/.zshrc # installer creates extra template zshrc
+    curl -Lo install.sh "$omzinstall" >> /dev/null 2>&1
+    sh install.sh --unattended >> /dev/null 2>&1 && rm install.sh
+    rm "$HOME/.zshrc" # installer creates extra template zshrc
   else
     pprint yellow "Oh-My-Zsh already installed"
   fi
@@ -56,23 +57,23 @@ setup_zsh() {
 
   # zsh-syntax-highligting
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-    $ZSH_CUSTOM/plugins/zsh-syntax-highlighting &> /dev/null
+    "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" >> /dev/null 2>&1
 
   # zsh-autosuggestions
   git clone https://github.com/zsh-users/zsh-autosuggestions \
-    $ZSH_CUSTOM/plugins/zsh-autosuggestions &> /dev/null
+    "$ZSH_CUSTOM/plugins/zsh-autosuggestions" >> /dev/null 2>&1
 
   setup_shell
 }
 
-function setup_neovim {
+setup_neovim() {
   XDG_CONFIG_HOME=$HOME/.config
   NVIM=$XDG_CONFIG_HOME/nvim
 
   pprint title neovim
 
   # install neovim
-  if ! nvim -v &> /dev/null; then
+  if ! nvim -v >> /dev/null 2>&1; then
     pprint blue "Installing neovim"
     install neovim
   else
@@ -80,26 +81,27 @@ function setup_neovim {
   fi
 
   # Remove existing nvim configs
-  [ -d $NVIM ] && rm -rf $NVIM
+  [ -d "$NVIM" ] && rm -rf "$NVIM"
 
   # Link .zsh* configs to dotfiles
-  mkdir $NVIM && pprint blue "- Creating $NVIM"
-  ln nvim/init.vim $NVIM/init.vim && \
+  mkdir "$NVIM" && pprint blue "- Creating $NVIM"
+  ln nvim/init.vim "$NVIM/init.vim" && \
     pprint blue "- Linking nvim/init.vim to $NVIM/init.vim"
 
   # installing fzf and ripgrep
-  if ! fzf --version &> /dev/null; then
+  if ! fzf --version >> /dev/null 2>&1; then
     pprint blue "Installing fzf"
     install fzf
   fi
-  if ! rg -v &> /dev/null; then
+  if ! rg -v >> /dev/null 2>&1; then
     pprint blue "Installing ripgrep"
     install fzf ripgrep
   fi
 
   pprint blue "Installing vim-plug"
-  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim' &> /dev/null
+  curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim \
+    --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  sh "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim >> /dev/null 2>&1
   pprint red "Run 'PlugInstall' inside vim to setup plugins"
 }
 
@@ -113,29 +115,29 @@ setup_tmux() {
 setup_node() {
   pprint title node
 
-  if ! node -v &> /dev/null; then
+  if ! node -v >> /dev/null 2>&1; then
     pprint blue "Installing nodejs"
     install nodejs
   else
     pprint yellow "nodejs already installed"
   fi
 
-  if ! npm -v &> /dev/null; then
+  if ! npm -v >> /dev/null 2>&1; then
     pprint blue "Installing npm"
     install npm
   else
     pprint yellow "npm already installed"
   fi
 
-  if ! yarn -v &> /dev/null; then
+  if ! yarn -v >> /dev/null 2>&1; then
     pprint blue "Installing yarn"
     install yarn
   else
     pprint yellow "yarn already installed"
   fi
 
-	read -p "Do you want to install some node packages? [Y/n]" opt
-	case $opt in
+	read -rp "Do you want to install some node packages? [Y/n]" opt
+	case "$opt" in
 		y*|Y*|"") ;;
 		n*|N*) return;;
 		*) return;;
@@ -154,4 +156,5 @@ setup_extras() {
   # - tig
   # - broot
   # - exa
+  # - shellcheck
 }
