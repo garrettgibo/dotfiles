@@ -16,7 +16,7 @@ setup_zsh() {
   # install zsh
   if ! type zsh >> /dev/null 2>&1; then
     pprint blue "Installing zsh"
-    install zsh
+    add_app zsh
   else
     pprint yellow "zsh already installed"
   fi
@@ -75,7 +75,7 @@ setup_neovim() {
   # install neovim
   if ! nvim -v >> /dev/null 2>&1; then
     pprint blue "Installing neovim"
-    install neovim
+    add_app neovim
   else
     pprint yellow "neovim already installed"
   fi
@@ -91,11 +91,11 @@ setup_neovim() {
   # installing fzf and ripgrep
   if ! fzf --version >> /dev/null 2>&1; then
     pprint blue "Installing fzf"
-    install fzf
+    add_app fzf
   fi
   if ! rg -v >> /dev/null 2>&1; then
     pprint blue "Installing ripgrep"
-    install fzf ripgrep
+    add_app fzf ripgrep
   fi
 
   pprint blue "Installing vim-plug"
@@ -117,21 +117,21 @@ setup_node() {
 
   if ! node -v >> /dev/null 2>&1; then
     pprint blue "Installing nodejs"
-    install nodejs
+    add_app nodejs
   else
     pprint yellow "nodejs already installed"
   fi
 
   if ! npm -v >> /dev/null 2>&1; then
     pprint blue "Installing npm"
-    install npm
+    add_app npm
   else
     pprint yellow "npm already installed"
   fi
 
   if ! yarn -v >> /dev/null 2>&1; then
     pprint blue "Installing yarn"
-    install yarn
+    add_app yarn
   else
     pprint yellow "yarn already installed"
   fi
@@ -145,7 +145,7 @@ setup_node() {
 
   # node packages to install
   pprint blue "Installing neovim from npm"
-  sudo npm install -g neovim
+  sudo npm add_app -g neovim
 }
 
 setup_extras() {

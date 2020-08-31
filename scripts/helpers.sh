@@ -19,7 +19,7 @@ check_system() {
 # install packages for following systems:
 # - arch based
 # - debian based
-install() {
+add_app() {
   check_system system_type
   if [ "$system_type" == "arch" ]; then
     sudo pacman -S "$@"
