@@ -20,7 +20,13 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-source $ZDOTDIR/.zsh_aliases
-source /home/garrett/.config/broot/launcher/bash/br
+source $ZDOTDIR/zsh_aliases
+
+# pyenv
+export PYENV_ROOT=$XDG_CONFIG_HOME/pyenv
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
 
 compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
