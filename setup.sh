@@ -2,8 +2,10 @@
 
 PATH_BASH=/usr/bin/bash
 PATH_ZSH=/usr/bin/zsh
-CONFIG_OMZ="$HOME/.config/oh-my-zsh"
-CONFIG_ZSH="$HOME/.config/zsh"
+XDG_CONFIG="$HOME/.config"
+CONFIG_OMZ="$XDG_CONGIG/oh-my-zsh"
+CONFIG_ZSH="$XDG_CONFIG/zsh"
+CONFIG_GIT="$XDG_CONFIG/git"
 
 
 # COMMANDS
@@ -18,6 +20,14 @@ error() { echo -e "\e[31m$1\e[0m"; }
 
 command_exists() {
     command -v "$@" >/dev/null 2>&1
+}
+
+dir_exists() {
+    if ! [ -d $@ ]; then
+        warn "$@ does not exist"
+        action "Creating $@"
+        mkdir -p $@
+    fi
 }
 
 install_zsh() {
@@ -51,18 +61,28 @@ setup_zsh () {
     info "done"
 
     info "Copying zshrc to $CONFIG_ZSH/.zshrc..."
-    if ! [ -d $CONFIG_ZSH ]; then
-        warn "$CONFIG_ZSH does not exist"
-        action "Creating $CONFIG_ZSH"
-        mkdir -p $CONFIG_ZSH
-    fi
+    dir_exists $CONFIG_ZSH
     cp zsh/zshrc $CONFIG_ZSH/.zshrc
     info "done"
+    
+    success "Zsh configuration complete"
+}
+
+setup_git () {
+    action "Setting up Zsh configuration"
+
+    info "Copying gitconfig to $CONFIG_GIT/config..."
+    dir_exists $CONFIG_GIT
+    cp git/gitconfig $CONFIG_GIT/config
+    info "done"
+    
+    success "Git configuration complete"
 }
 
 setup_configs() {
     action "Setting up all user configurations"
     setup_zsh
+    setup_git
 }
 
 install_zsh
