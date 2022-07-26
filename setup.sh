@@ -3,13 +3,17 @@
 PATH_BASH=/usr/bin/bash
 PATH_ZSH=/usr/bin/zsh
 XDG_CONFIG="$HOME/.config"
-CONFIG_OMZ="$XDG_CONGIG/oh-my-zsh"
+CONFIG_OMZ="$XDG_CONFIG/oh-my-zsh"
+OMZ_PLUGINS="$CONFIG_OMZ/custom/plugins"
 CONFIG_ZSH="$XDG_CONFIG/zsh"
 CONFIG_GIT="$XDG_CONFIG/git"
+CURR_DIR=$(pwd)
 
 
 # COMMANDS
 INSTALL="sudo apt install -y"
+LINK="ln -sf"
+
 
 # Logging wrappers
 info() { echo -e "$1\e[0m"; }
@@ -51,18 +55,30 @@ install_oh_my_zsh() {
     fi
 
     success "Oh My Zsh installed to $ZSH"
+
+    action "Installing Zsh Plugins"
+    action "Cloning Zsh Syntax Highlighting"
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $OMZ_PLUGINS/zsh-syntax-highlighting
+
+    action "Cloning Zsh Autosuggestions"
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git $OMZ_PLUGINS/zsh-autosuggestions
+
 }
 
 setup_zsh () {
     action "Setting up Zsh configuration"
 
-    info "Copying zshenv to $HOME/.zshenv..."
-    cp zsh/zshenv $HOME/.zshenv
+    info "Linking zshenv to $HOME/.zshenv..."
+    $LINK $CURR_DIR/zsh/zshenv $HOME/.zshenv
     info "done"
 
-    info "Copying zshrc to $CONFIG_ZSH/.zshrc..."
+    info "Linking zshrc to $CONFIG_ZSH/.zshrc..."
     dir_exists $CONFIG_ZSH
-    cp zsh/zshrc $CONFIG_ZSH/.zshrc
+    $LINK $CURR_DIR/zsh/zshrc $CONFIG_ZSH/.zshrc
+    info "done"
+
+    info "Linking zsh_aliases to $CONFIG_ZSH/zsh_aliases..."
+    $LINK $CURR_DIR/zsh/zsh_aliases $CONFIG_ZSH/zsh_aliases
     info "done"
     
     success "Zsh configuration complete"
@@ -71,9 +87,9 @@ setup_zsh () {
 setup_git () {
     action "Setting up Zsh configuration"
 
-    info "Copying gitconfig to $CONFIG_GIT/config..."
+    info "Linking gitconfig to $CONFIG_GIT/config..."
     dir_exists $CONFIG_GIT
-    cp git/gitconfig $CONFIG_GIT/config
+    $LINK $CURR_DIR/git/gitconfig $CONFIG_GIT/config
     info "done"
     
     success "Git configuration complete"

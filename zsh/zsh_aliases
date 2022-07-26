@@ -1,0 +1,23 @@
+# ls
+alias l="ls -lah --group-directories-first --color=auto"
+alias la="ls -lAh --group-directories-first --color=auto"
+alias ls="ls --group-directories-first --color=auto"
+
+# Zsh
+alias config-zsh="vim $XDG_CONFIG_HOME/zsh/.zshrc"
+alias source-zsh="source $XDG_CONFIG_HOME/zsh/.zshrc"
+
+# Vim
+alias config-vim="vim $XDG_CONFIG_HOME/vim/.vimrc"
+alias source-vim="source $XDG_CONFIG_HOME/vim/.vimrc"
+
+# Misc
+alias open=xdg-open
+alias mkdir="mkdir -v"
+alias rmdir="rmdir -v"
+
+# Confirmations
+alias mv="mv -i"
+alias cp="cp -i"
+alias rm="rm -i"
+alias ln="ln -i"
