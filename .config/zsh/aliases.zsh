@@ -1,0 +1,1 @@
+alias get_idf='. $HOME/dev/work/modretro/01_external/esp-idf/export.sh'

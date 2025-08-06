@@ -1,6 +1,8 @@
 ZINIT_HOME=$XDG_DATA_HOME/zinit/zinit.git
 FZF_HOME=$XDG_CONFIG_HOME/fzf
 OMP_HOME=$XDG_CONFIG_HOME/oh-my-posh
+ZOXIDE_HOME=$XDG_CONFIG_HOME/zoxide
+PYENV_HOME=$XDG_CONFIG_HOME/pyenv
 
 # Download Zinit, if it's not there yet
 if [ ! -d "$ZINIT_HOME" ]; 
@@ -44,5 +46,9 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
+# Load modules
 source $FZF_HOME/fzf.zsh
 source $OMP_HOME/omp.zsh
+source $ZOXIDE_HOME/zoxide.zsh
+source $PYENV_HOME/pyenv.zsh
+source $ZDOTDIR/aliases.zsh
