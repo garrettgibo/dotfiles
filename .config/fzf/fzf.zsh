@@ -14,5 +14,4 @@ then
   PATH="${PATH:+${PATH}:}$FZF_DATA_HOME/bin"
 fi
 
-source <(fzf --zsh)
 eval "$(fzf --zsh)"
